@@ -1,0 +1,88 @@
+/*凍結表頭/行頭*/
+/*sticky會跟著上一層的overfloat跑！！因此要定義一個外框*/
+.table-sticky-wrapper{
+	width: 100%;
+	height: 60vh;/*外框的高度*/
+	overflow:auto;
+  }
+  table.table-sticky {
+	table-layout: fixed;
+	min-width: 100%;
+	width: auto;
+	overflow: unset!important
+  }
+  .table-sticky th {
+	position:sticky;
+	word-break: keep-all;
+	background: #fff
+  }
+  
+  .table-sticky td {
+	border-right: 1px solid #ddd;
+	text-align: right
+  }
+  
+  .table-sticky thead tr th:first-of-type {
+	left:0;/*sticky要用 上下左右定位*/
+	z-index:3;
+	border-right: 0;
+	box-shadow: 0px 0px 0 inset #ddd
+  }
+  .table-sticky thead tr th{
+	top:0;/*sticky要用 上下左右定位*/
+	background: #f7f7f7;
+	vertical-align: top;
+	border-bottom: 0;
+	border-right: 1px solid #ddd;
+	box-shadow: 0 0px 0 inset #ddd;
+	z-index: 2;
+  }
+  /*sticky要用 上下左右定位*/
+  .table-sticky tbody th {
+	left: 0;/*定位用*/
+	z-index: 2;/*遮蓋表格內容的圖層層級設定*/
+	box-shadow: 0px 0 0 inset #ddd;/*內框線*/
+  }
+  .table-sticky .card-header{
+	background: #f7f7f7
+  }
+  .table-sticky td a{
+	float: left
+  }/*為了按鈕設定的，刪除不影響*/
+  .table-sticky th a{
+	display: inline-block
+  }/*為了按鈕設定的，刪除不影響*/
+  
+  /*表格做記號：群組底色*/
+  table [data-group="0"],table tr[data-group="0"]>th{
+	  background: #ffffff!important;
+  }
+  table [data-group="1"],table tr[data-group="1"]>th{
+	  background: #F5F6F7!important;
+  }
+  @media screen and (max-width: 767px) {
+	.table-sticky tbody th,
+	.table-sticky thead tr th:first-of-type{
+	  width: unset!important;/*th有時會自帶寬度設定，用以清除*/
+	  word-break: break-word;
+	  min-width: 100px;
+	  max-width: 150px}
+  }/*讓左邊第一直欄的寬度 手機尺寸時不要過寬遮蔽資訊*/
+  
+  table.vertical {
+	-webkit-writing-mode: vertical-lr;
+	-moz-writing-mode: vertical-lr;
+	-ms-writing-mode: tb-lr;
+	writing-mode: vertical-lr;
+}
+
+table.vertical th,table.vertical td {
+	width: 100px;
+	height: 14px;
+}
+  table.vertical div {
+	-webkit-writing-mode: horizontal-tb;
+	-moz-writing-mode: horizontal-tb;
+	-ms-writing-mode: lr-tb;
+	writing-mode: horizontal-tb;
+}

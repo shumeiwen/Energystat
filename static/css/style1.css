@@ -1,0 +1,375 @@
+	* {font-family: "微軟正黑體"}
+	/*文字縮排*/
+	.indent-15 {text-indent: 15px;text-align:left}
+	.indent-40 {text-indent: 40px;text-align:left}
+	.indent-60 {text-indent: 60px;text-align:left}
+	/*文字字距*/
+	.WordSpace {margin: 10px}
+    .Text-Right{text-align:right;}
+	.Text-middle{text-align:center;}
+	.Text-end{text-align:end;}
+	.Text-left{text-align:left;}
+
+	/*表格內格式（寬及切齊上界）*/
+	.Width-300 {width:auto;}
+	.Width-100 {width: 100px;}
+	.Width-50 {width: 50px;}
+	.Align-Top {vertical-align:top }	
+	/*畫面上的橫線格式*/
+	#breadcrumb{
+   		 border-top: 3px solid #57626a;
+   		 border-top: 3px solid #2870ae;
+   		 background: #eee;
+   		 text-transform: none;
+   		 padding: 5px 15px;
+	}
+/*查詢流程區塊格式設定*/
+
+    .navigationFlowArea {
+   			height: 36px;
+    		line-height: 1px;
+    		padding: 5px 0px 5px 0px;
+
+	}
+	.row1 {
+   		    font-weight: bold;
+    		font-size: 1.1em;
+			
+	}/*row1*/
+
+ 	.col1, .col2, .col3 , .col4{ float: left; width: 110px; margin-right: 59px; text-align: center;}
+ 	.number {
+    		color: rgb(255, 255, 255);
+    		font-size: 1.8em;
+    		font-weight: bold;
+    		height: 32px;
+    		line-height: 20px;
+    		margin: 0px 39px;
+    		outline: rgb(255, 255, 255) none 0px;
+   		    padding-top: 5px;
+    		text-align: center;
+	}/*number*/
+ 	.text {
+  		    /*font-family:  Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif !important; */font-weight: bold;
+    		/*font-size: 1.1em;*/
+    		padding-bottom: 2px;
+    		line-height:100%;
+	}
+	/*text*/
+	.active {color: #11125c; }/*active*/
+	.active .number{
+		border-radius:100px 100px 100px 100px;
+		width:1cm;
+		height:0.8cm;
+		background-color: #11125c;
+
+	 }
+	 .passive { color: #c2c2c2; }
+	 .passive .number{
+		border-radius:100px 100px 100px 100px;
+		width:1cm;
+		height:0.8cm;
+		background-color: #c2c2c2;
+	 }
+	 .future { color: #87b6da; }
+	 .future .number{
+		border-radius:100px 100px 100px 100px;
+		width:1cm;
+		height:0.8cm;
+		background-color: #87b6da;
+	 }
+
+	/*Dotted line*/
+	.fullscreen { width: 100%; margin-bottom: 6px; margin-top: 6px; margin-bottom: 0px; margin-top: 30px; }
+	.dottedlineLeft {
+    		border-top: 1px dotted #11125c;
+   		    position: relative;
+    		left: 71px;
+    		top: 18px;
+    		width: 137px;
+            z-index:9999;position:relative;
+	}
+
+	.dottedlineCenter {
+   		    border-top: 1px dotted #11125c;
+    		position: relative;
+    		left: 240px;
+    		top: 18px;
+    		width: 137px;
+            z-index:9999;position:relative;
+	}
+	.dottedlineRight {
+   		    border-top: 1px dotted #11125c;
+    		position: relative;
+    		left: 409px;
+    		top: 18px;
+    		width: 137px;
+	}
+
+
+/*頁籤顏色設定*/
+	.group-center {
+        width: 700px;
+        margin: 0 auto;
+    }
+    .panel-control {
+		/*position:absolute;*/
+		opacity:0;
+	}
+
+      .tab-group{
+        z-index: -9999;
+      }
+
+
+	  .tab-group label {
+        display:inline-block;
+		padding: 5px 10px;
+		border:1px solid #ccc;
+		border-bottom:none;
+		background-color: #ccc;
+		bottom:-1px;
+		position:relative;
+		font-size:larger;
+	  }
+	  .content-group {
+		border:1px solid #ccc;
+		padding: 20px;
+	  }
+
+	  .content {display:none;}
+
+	  /* .content1{display:block;} */
+	  /* .tab-group .active {
+		position:relative;
+		background-color: #fff;
+	  } */
+	
+	  /*分類頁籤視覺設定*/
+	  #radio1:checked ~ .tab-group [for="radio1"],
+	  #radio2:checked ~ .tab-group [for="radio2"],
+	  #radio3:checked ~ .tab-group [for="radio3"],
+	  #radio4:checked ~ .tab-group [for="radio4"],
+	  #radio5:checked ~ .tab-group [for="radio5"],
+	  #radio6:checked ~ .tab-group [for="radio6"],
+	  #radio7:checked ~ .tab-group [for="radio7"],
+	  #radio8:checked ~ .tab-group [for="radio8"],
+	  #radio9:checked ~ .tab-group [for="radio9"],
+	  #radio10:checked ~ .tab-group [for="radio10"],
+	  #radio11:checked ~ .tab-group [for="radio11"]{background-color: #11125c;color: #f7f8f8; font-weight:bold; font-size:larger;}
+	
+	  /*頁籤內容文字設定*/
+	  #radio1:checked ~ .content-group .content1,
+	  #radio2:checked ~ .content-group .content2,
+	  #radio3:checked ~ .content-group .content3,
+	  #radio4:checked ~ .content-group .content4,
+	  #radio5:checked ~ .content-group .content5,
+	  #radio6:checked ~ .content-group .content6,
+	  #radio7:checked ~ .content-group .content7,
+	  #radio8:checked ~ .content-group .content8,
+	  #radio9:checked ~ .content-group .content9,
+	  #radio10:checked ~ .content-group .content10,
+	  #radio11:checked ~ .content-group .content11 {display:block}
+
+	  
+/*下拉選項設定*/
+	  .container{
+		padding: 2rem 5px;
+		width: 100px;
+	  }
+	  
+	  .drop {
+		/*position: relative;*/
+		display: block;
+		width: 100%;
+		height:200px;
+		margin: 0 0 10px;
+		&:hover {
+		  .dropOption {
+			display: block;
+		  }
+		}
+		&:hover {
+		  .dropdown {
+			display: block;
+		  }
+		}
+		&:hover {
+		  .dropdown.close {
+			display: none;
+		  }
+		}
+		/*選框內容設定*/
+		.dropOption {
+		  position: relative;
+		  width: 200px;
+		  color: #666;
+		  font-size: 1rem;
+		  background-color: #fff;
+		  padding: 10px;
+		  border: 1px solid #888;
+		  border-radius: 5px;
+		  box-sizing: border-box;
+		  cursor: pointer;
+		  &::after {
+			content: "";
+			/*position: absolute;*/
+			top: 20px;
+			right: 12px;
+			border-width: 8px 6px;
+			border-style: solid;
+			border-color: #999 transparent transparent transparent;
+		  }
+		}
+		/*下拉選項設定*/
+		.dropdown {
+		  /*display: none;*/
+		  width: 200px;
+		  max-height: 200px;
+		  position: absolute;
+		  color: #333;
+		  padding: 0;
+		  margin: 0;
+		  background-color: #f9f9f9;
+		  box-shadow: 0px 2px 3px 0px #ccc;
+		  border-radius: 6px;
+		  box-sizing: border-box;
+		  overflow: auto;
+		  z-index: 10;
+		  font-size:larger;
+		  > li {
+			display: block;
+			color: #000;
+			padding: 12px;
+			font-size: larger;
+			margin: 0 10px;
+			cursor: pointer;
+			&:first-child {
+			  margin: 10px;
+			}
+			&:last-child {
+			  margin-bottom: 10px;
+			}
+			&:hover {
+			  background-color: #4A5B79;
+			  border-radius: 6px;
+			  color: #FFFFFF;
+			}
+		  }
+		  &::-webkit-scrollbar {
+			width: 15px;
+		  }
+		  &::-webkit-scrollbar-track {
+			background-color: #eee;
+			border-radius: 6px;
+		  }
+		  &::-webkit-scrollbar-thumb {
+			background-color: #4A5B79;
+			border-radius: 15px;
+		  }
+		  &::-webkit-scrollbar-button {
+			background-color: #f9f9f9;
+		  }
+		}
+	  }
+  
+/*公式_利用燈箱效果*/
+.black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index:1001;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+.white_content {
+	display: none;
+	position: relative;
+	top: 10%;
+	/*left: 30%;*/
+	/*width: 25%;*/
+	height:auto;
+	padding: 10px;
+	border: solid  rgba(155, 158, 165, 0.13);
+	background-color: rgba(255, 255, 255, 0);
+	z-index:1002;
+	overflow: auto;
+}
+
+/*表格行列互換*/
+label[for=element-toggle] {
+	cursor: pointer;
+	color: red;
+  }
+  #element-toggle {
+	display: none;
+  }
+  
+  #element-toggle:checked ~ #toggled-element tr {
+	display: block;
+	float: left;
+  }
+  #element-toggle:checked ~ #toggled-element th,
+  #element-toggle:checked ~ #toggled-element td {
+	display: block;
+  }
+/*公式樣式設定*/
+  .function_style{
+	color:#aa1f1f;
+	font-size: 20px;
+	margin-top: 0.5cm;
+	margin-bottom:0.5cm;
+	font-weight:bolder;
+
+}
+
+.Submit_type{
+	--tw-text-opacity: 1;
+    color: rgb(54 143 199/var(--tw-text-opacity));
+}
+
+button {
+	background-color: #4A5B79; /* Green */
+	border: 1px solid rgb(59, 54, 82);
+	border-radius: 6px;
+	color: white;
+	padding: 4px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	cursor: pointer;
+  }
+
+  #element-toggle {
+	display: none;
+  }
+  
+  #element-toggle:checked ~ #toggled-element tr {
+	display: block;
+	float: left;
+  }
+  #element-toggle:checked ~ #toggled-element th,
+  #element-toggle:checked ~ #toggled-element td {
+	display: block;
+  }
+
+  .sq {
+	width:300px;
+	height:40px;
+	line-height:50px;
+	padding:10px;
+	background:#4A5B79;
+	color:#fff;
+    border:1px;
+	border-radius: 5px 50px 5px 20px;
+    font-weight:bold;
+    font-size:larger;
+    text-align: left;
+    vertical-align:text-top;
+  }

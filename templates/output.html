@@ -1,0 +1,139 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="zh_TW"></html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    {% load humanize %}
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <link rel="stylesheet" href="{% static 'css/TableStyle1.css' %}">
+    <title>國際能源決策支援查詢系統</title>
+    <style>
+		header {padding: 20px; position: sticky; top:0;background-color: rgb(255, 255, 255);z-index:1000}
+        body {font-family: "Times New Roman", Georgia, Serif; font-size:x-large}
+        
+
+        table {
+			    border-collapse:collapse;	
+                border: 0px solid #ccc;
+				font-size: 14px;
+			}
+			thead{
+                position:sticky;
+                top: 0;
+            }
+
+
+			/*table th {
+				background: #ccc;
+			}*/
+			
+			table td {
+				padding: 10px;
+			}
+			
+			table.vertical {
+				-webkit-writing-mode: vertical-lr;
+				-moz-writing-mode: vertical-lr;
+				-ms-writing-mode: tb-lr;
+				writing-mode: vertical-lr;
+			}
+			
+			table.vertical th,
+			table.vertical td {
+				width: 100px;
+				height: 30px;
+			}
+			
+			table.vertical div {
+				-webkit-writing-mode: horizontal-tb;
+				-moz-writing-mode: horizontal-tb;
+				-ms-writing-mode: lr-tb;
+				writing-mode: horizontal-tb;
+			}
+            table thead tr:first-child{
+                border-top:1px #161616 solid;
+                border-bottom:1px #161616 solid;
+                height: 50px;
+            }
+            table tr:last-child{
+                border-bottom:1px #161616 solid;
+            }
+            td:nth-child(1),td:nth-child(2),td:nth-child(3){
+				position:sticky;
+                top:0;
+	        }
+
+
+    </style>
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+    <script src="https://unpkg.com/xlsx/dist/shim.min.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/blob.js@1.0.1/Blob.js"></script>
+    <script src="https://unpkg.com/file-saver@1.3.3/FileSaver.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var flag = false;
+        //注：多次點擊後，內面文字會包裹多層div，尚無好的解決方法
+        function test() {
+            if(!flag) {
+                $('table').addClass('vertical').find('th, td').wrapInner('<div>');
+//					$('table').addClass('vertical');//數字會變垂直，不能用
+            } else {
+                $('table').removeClass('vertical');
+            }
+            flag = !flag;
+        }
+
+    </script>
+
+
+</head>
+<header>
+    <h1><p class="Text-middle">國際能源決策支援查詢系統</p></h1>
+	<div id="breadcrumb"></div><!--分隔線-->
+</header>
+
+<body>
+<form class="group-center">
+    <h2 class="Text-middle">產製查詢結果</h2>
+    {%if output == "欲查詢「項目」及「國別」皆未選取，請回上頁選取"%}
+        <h3>{{output}}</h3>
+        <input type ="button" class="but"  onclick="history.back()" value="回到上一頁"></input>
+    {%elif output == "欲查詢「項目」未選取，請回上頁選取"%}
+        <h3>{{output}}</h3>
+        <input type ="button" class="but"  onclick="history.back()" value="回到上一頁"></input>
+    {%elif output == "欲查詢「國別」未選取，請回上頁選取"%}
+        <h3>{{output}}</h3>
+        <input type ="button" class="but" onclick="history.back()" value="回到上一頁"></input>
+    {%else %}
+        <div align="right">
+            <!--<span><input type="button" onclick="test()"  style="font-size: medium;border-radius: 6px; border:1px solid #a6a7a6;" value="行列轉置" /></span></span>   <span></span>-->
+            <span><input type="button" onclick="javascript:void(0)"  id="createXLSX" style="font-size: medium;border-radius: 6px; border:1px solid #a6a7a6;" value="產製EXCEL報表"></span></div>
+        <div class="table-sticky-wrapper" >
+        <table id="tableToExport" class="table table-sticky">
+            <thead class="tr-sticky"><tr>
+                {%for k in output.columns%}
+                    <th>{{k}}</th>
+                {%endfor%}
+            </tr></thead><tbody>
+            {%for data in output.data%}
+                <tr>{%for d in data%}
+                <td>{{d|intcomma}}</td>
+                {%endfor%}</tr>{%endfor%}</tbody>
+        <tfoot><tr style="background: #57626a; color: #fff;"><td colspan={{ColNum}}>資料來源</td>
+            {%for s in Source%}
+            <tr><td colspan={{ColNum}}>「{{s.Proj_Name}}」來自{{s.Org_Name}}_{{s.DB_Name}}_{{s.Subject}}資料庫，資料庫發佈時間：{{s.Issue_Date | date:'Y/m/d'  }}
+            </td></tr>  
+            {%endfor%}</tfoot>
+    </table></div>
+
+{%endif%}
+</form>
+
+<script type="text/javascript" src="{% static 'js/script.js' %}"></script> 
+
+
+</body>

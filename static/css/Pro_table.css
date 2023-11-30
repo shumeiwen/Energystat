@@ -1,0 +1,37 @@
+/*表格樣式設定*/
+table{
+	font-family: sans-serif;
+	border-collapse:collapse;
+  
+  }
+  
+  th{
+	background-color:#141a1965;
+	color:#ffffff;
+	width:25vw;
+	height:30px;
+  }
+
+  td:first-of-type{
+	text-align:start;
+	width:30vmax;
+  }
+
+  td{
+	background-color:#ffffff;
+	width:25vw;
+	height:40px;
+	text-align:center;
+  }
+  
+  tr{
+	border-bottom: 1px solid #dddddd;
+  }
+  
+  tr:last-of-type{
+	border-bottom: 2px solid #141a1965;
+  }
+  
+  tr:nth-of-type(even) td{
+	background-color:#f3f3f3;
+  }

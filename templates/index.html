@@ -1,0 +1,571 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="zh_TW"></html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國際能源決策支援查詢系統</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+
+    <style>
+		header {background-color:rgb(255, 255, 255);padding: 20px; position: sticky; top:0;z-index:1000}
+        body {font-family: "Times New Roman", Georgia, Serif;font-size:large}
+        .table_style{
+            width:100%;
+            border-collapse:collapse;
+        }
+        .table_style th{
+            text-align:left; 
+        }
+        .table_style td{
+            text-align:center;
+        }
+        .table_style_item{
+            background-color:rgb(230, 229, 229);
+        }
+        .table_style thead tr:first-of-type{
+            border-top:1px #161616 solid;
+        }
+        .table_style thead tr{
+            border-bottom:1px #161616 solid;
+        }
+        .table_style td:nth-child(even){
+            border-left:1px #161616 solid;
+        }
+        .table_style tr:last-of-type{
+            border-bottom:1px #161616 solid;
+        }
+
+        .table_style_line{
+            border-left:1px #161616 solid;
+        }
+    </style>
+    <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+</head>
+<header>
+    <h1><p class="Text-middle">國際能源決策支援查詢系統</p></h1>
+	<div id="breadcrumb"></div><!--分隔線-->
+</header>
+
+<body>
+<form  class="group-center" action="/output/" method="post">
+        {% csrf_token %}
+        <h2 class="Text-middle">查詢條件設定</h2>
+        <div id="step1">
+        <div class="sq"><u>Step1. 選取資料項目</u></div>       
+        <input type="radio" name="panel-radio" id="radio1" class="panel-control" checked>
+        <input type="radio" name="panel-radio" id="radio2" class="panel-control">
+        <input type="radio" name="panel-radio" id="radio3" class="panel-control">
+        <input type="radio" name="panel-radio" id="radio4" class="panel-control">
+        <div class="tab-group">
+          <label for="radio1"><div>能源指標</div></label>
+          <label for="radio2"><div>溫室氣體</div></label>
+          <label for="radio3"><div>電力供給</div></label>
+          <label for="radio4"><div>電力消費</div></label>
+        </div>
+      <div class="content-group">
+    <!--能源指標頁籤-->
+          <div class="content content1">
+            <div class="form-check"><input class="form-check-input" type="checkbox" name=""  id="IND_01" ><label class="form-check-label" for="IND_01">能源密集度</label></div>
+            <div class="form-check indent-15"><input class="form-check-input IND_01" type="checkbox" name="Project" value="IND_01100" id="IND_01100" ><label class="form-check-label" for="IND_01100">最終能源消費</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light1').style.display='block';document.getElementById('fade1').style.display='block'" value="公式">
+                <div id="light1" class="white_content" style="display:none">計算公式為：<div class="function_style">最終能源消費(Total final consumption)  ÷  GDP(GDP_PPP)</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light1').style.display='none';document.getElementById('fade1').style.display='none'" value="關閉公式"></div></div>
+            </div>
+            <div class="form-check indent-15"><input class="form-check-input IND_01" type="checkbox" name="Project" value="IND_01200" id="IND_01200"><label class="form-check-label" for="IND_01200">國內能源消費</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light2').style.display='block';document.getElementById('fade2').style.display='block'" value="公式">
+                <div id="light2" class="white_content" style="display:none">計算公式為：<div class="function_style">{最終能源消費(Total final consumption) + 能源部門自用(Energy industry own use)} ÷  GDP(GDP_PPP)</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light2').style.display='none';document.getElementById('fade2').style.display='none'" value="關閉公式"></div></div> 		
+            </div>
+            <div class="form-check indent-15"><input class="form-check-input IND_01" type="checkbox" name="Project" value="IND_01300" id="IND_01300"><label class="form-check-label" for="IND_01300">能源總供給</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light3').style.display='block';document.getElementById('fade3').style.display='block'" value="公式">
+                <div id="light3" class="white_content" style="display:none">計算公式為：<div class="function_style">能源總供給(Total energy supply)  ÷  GDP_PPP</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light3').style.display='none';document.getElementById('fade3').style.display='none'" value="關閉公式"></div></div> 		
+            </div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="IND_02000" id="IND_02000"><label class="form-check-label" for="IND_02000">電力密集度</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="IND_03000" id="IND_03000"><label class="form-check-label" for="IND_03000">進口能源依存度</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light4').style.display='block';document.getElementById('fade4').style.display='block'" value="公式">
+                <div id="light4" class="white_content" style="display:none">計算公式為：<div class="function_style">｛進口(Import)-出口(Export)｝÷｛進口(Import)+自產(Production)-出口(Export)｝</div>
+                <div font-size="12px">註：IEA認為核能發電為自產能源，歸屬為自產；但我國認定核能為進口，遂若計算進口能源量值時，公式中分子需加計「自產_核能」的數值。</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light4').style.display='none';document.getElementById('fade4').style.display='none'" value="關閉公式"></div></div> 
+            </div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="IND_04100" id="IND_04100"><label class="form-check-label" for="IND_04100">GDP</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="IND_04200" id="IND_04200"><label class="form-check-label" for="IND_04200">GDP_PPP（經購買力平減後GDP）</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="IND_05000" id="IND_05000"><label class="form-check-label" for="IND_05000">電力排放係數</label></div>	
+      </div>
+    
+      <!--溫室氣體頁籤-->
+        <div class="content content2">
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="GHG_01000" id="GHG_01000"><label class="form-check-label" for="GHG_01000">溫室氣體排放量</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="GHG_02000" id="GHG_02000" ><label class="form-check-label" for="GHG_02000">CO<sub>2</sub>排放量</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="" value="" id="GHG_02"><label class="form-check-label" for="GHG_02">各部門CO<sub>2</sub>排放量</label></div>
+            <div class="form-check indent-15"><input class="form-check-input GHG_02" type="checkbox" name="Project" value="GHG_02100" id="GHG_02100"><label class="form-check-label" for="GHG_02100">能源部門</label></div>
+            <div class="form-check indent-40"><input class="form-check-input " type="checkbox" name="Project" value="GHG_02110" id="GHG_02110"><label class="form-check-label" for="GHG_02110">發電及供熱用</label></div>
+            <div class="form-check indent-40"><input class="form-check-input" type="checkbox" name="Project" value="GHG_02190" id="GHG_02190"><label class="form-check-label" for="GHG_02190">其他</label></div>
+            <div class="form-check indent-15"><input class="form-check-input GHG_02" type="checkbox" name="Project" value="GHG_02200" id="GHG_02200"><label class="form-check-label" for="GHG_02200">工業部門</label></div>
+            <div class="form-check indent-15"><input class="form-check-input GHG_02" type="checkbox" name="Project" value="GHG_02300" id="GHG_02300"><label class="form-check-label" for="GHG_02300">運輸部門</label></div>
+            <div class="form-check indent-15"><input class="form-check-input GHG_02" type="checkbox" name="Project" value="GHG_02400" id="GHG_02400"><label class="form-check-label" for="GHG_02400">農業部門</label></div>
+            <div class="form-check indent-15"><input class="form-check-input GHG_02" type="checkbox" name="Project" value="GHG_02500" id="GHG_02500"><label class="form-check-label" for="GHG_02500">服務業部門</label></div>
+            <div class="form-check indent-15"><input class="form-check-input GHG_02" type="checkbox" name="Project" value="GHG_02600" id="GHG_02600"><label class="form-check-label" for="GHG_02600">住宅部門</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="GHG_03000" id="GHG_03000"><label class="form-check-label" for="GHG_03000">CO<sub>2</sub>排放密集度</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="GHG_04000" id="GHG_04000"><label class="form-check-label" for="GHG_04000">CO<sub>2</sub>人均排放量</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="GHG_05000" id="GHG_05000"><label class="form-check-label" for="GHG_05000">每單位能源排放</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light5').style.display='block';document.getElementById('fade5').style.display='block'" value="公式">
+                <div id="light5" class="white_content" style="display:none">計算公式為：<div class="function_style">二氧化碳燃燒排放量(CO<sub>2</sub> Fuel combustion) ÷ 能源總供給(Total energy supply)</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light5').style.display='none';document.getElementById('fade5').style.display='none'"value="關閉公式"></div></div>
+            </div>
+        </div>
+    
+    <!--電力供給頁籤-->
+    <div class="content content3">
+        <table class="table_style"><thead>
+            <tr><th style="text-align:center" rowspan="3"></th><th class="table_style_line" style="text-align:center"colspan="2">IEA</th><th class="table_style_line" style="text-align:center"colspan="4">IRENA</th>
+            <tr><th class="table_style_line" style="text-align:center"colspan="2">發電量</th><th class="table_style_line" style="text-align:center"colspan="2">發電量</th><th class="table_style_line" style="text-align:center"colspan="2">發電裝置容量</th></tr>
+            <tr><th class="table_style_line" style="text-align:center">數量</th><th style="text-align:center">占比</th><th class="table_style_line" style="text-align:center" style="text-align:center">數量</th><th>占比</th><th class="table_style_line" style="text-align:center">數量</th><th style="text-align:center">占比</th></tr>
+</thead><tbody>
+            <tr><th><label class="form-check-label" for="000">總計</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_30000" id="Egen_30000"></td>
+                <td></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_10000" id="Egen_10000"></td>
+                <td></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_10000" id="Egen_10000"></td>
+                <td></td>
+            </tr>
+            <tr class="table_style_item"><th class="indent-15"><label class="form-check-label" for="000">化石能源</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_31100" id="Egen_31100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_41100" id="Egen_41100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_11100" id="Egen_11100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_21100" id="Egen_21100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_11100" id="Ecap_11100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_21100" id="Ecap_21100"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">燃煤</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_31100" id="Egen_31100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_41100" id="Egen_41100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_11100" id="Egen_11100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_21100" id="Egen_21100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_11100" id="Ecap_11100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_21100" id="Ecap_21100"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">燃油</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_31200" id="Egen_31200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_41200" id="Egen_41200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_11200" id="Egen_11200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_21200" id="Egen_21200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_11200" id="Ecap_11200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_21200" id="Ecap_21200"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">燃氣</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_31100" id="Egen_31300"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_41100" id="Egen_41300"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_11100" id="Egen_11300"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_21100" id="Egen_21300"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_11100" id="Ecap_11300"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_21100" id="Ecap_21300"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">其他不分燃料</label></td>
+                <td></td>
+                <td></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_11400" id="Egen_11400"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_21400" id="Egen_21400"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_11400" id="Ecap_11400"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_21400" id="Ecap_21400"></td>
+            </tr>
+            <tr class="table_style_item"><th class=" indent-15"><label class="form-check-label" for="000">核能</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_34000" id="Egen_34000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_44000" id="Egen_44000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_14000" id="Egen_14000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_24000" id="Egen_24000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_14000" id="Ecap_14000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_24000" id="Ecap_24000"></td>
+            </tr>
+            <tr class="table_style_item"><th class=" indent-15"><label class="form-check-label" for="000">再生能源</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_32000" id="Egen_32000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_42000" id="Egen_42000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_12000" id="Egen_12000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_22000" id="Egen_22000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_12000" id="Ecap_12000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_22000" id="Ecap_22000"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">風力</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_32200" id="Egen_32200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_42200" id="Egen_42200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_12200" id="Egen_12200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_22200" id="Egen_22200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_12200" id="Ecap_12200"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_22200" id="Ecap_22200"></td>
+            </tr>
+            <tr><th class=" indent-60"><label class="form-check-label" for="000">離岸風力</label></td>
+                <td></td>
+                <td></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_12210" id="Egen_12210"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_22210" id="Egen_22210"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_12210" id="Ecap_12210"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_22210" id="Ecap_22210"></td>
+            </tr>
+            <tr><th class=" indent-60"><label class="form-check-label" for="000">陸域風力</label></td>
+                <td></td>
+                <td></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_12220" id="Egen_12220"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_22220" id="Egen_22220"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_12220" id="Ecap_12220"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_22220" id="Ecap_22220"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">太陽光電</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_32100" id="Egen_32100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_42100" id="Egen_42100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_12100" id="Egen_12100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_22100" id="Egen_22100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_12100" id="Ecap_12100"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_22100" id="Ecap_22210"></td>
+            </tr>
+            <tr><th class=" indent-40"><label class="form-check-label" for="000">其他再生能源</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_33900" id="Egen_33900"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_43900" id="Egen_43900"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_13900" id="Egen_12900"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_23900" id="Egen_22900"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_13900" id="Ecap_12900"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_23900" id="Ecap_22900"></td>
+            </tr>
+            <tr class="table_style_item"><th class=" indent-15"><label class="form-check-label" for="000">其他</label></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_39000" id="Egen_39000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_49000" id="Egen_49000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_19000" id="Egen_19000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Egen_29000" id="Egen_29000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_19000" id="Ecap_19000"></td>
+                <td><input class="form-check-input" type="checkbox" name="Project" value="Ecap_29000" id="Ecap_29000"></td>
+            </tr></tbody>
+        </table></div>
+    
+    <!--電力消費頁籤-->
+        <div class="content content4">
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="EC_1000" id="EC_1000"><label class="form-check-label" for="EC_1000">電力消費數量</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="EC_2000" id="EC_2000"><label class="form-check-label" for="EC_2000">電力消費占比</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light6').style.display='block';document.getElementById('fade6').style.display='block'" value="公式">
+                <div id="light6" class="white_content" style="display:none">計算公式為： <div class="function_style">最終能源消費_電力(Total final consumption_Electicity) ÷ 最終能源消費_合計(Total final consumption_Total)</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light6').style.display='none';document.getElementById('fade6').style.display='none'" value="關閉公式"></div></div>
+            </div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="Project" value="EC_3000" id="EC_3000"><label class="form-check-label" for="EC_3000">工業部門電力消費占比</label>
+                <input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light7').style.display='block';document.getElementById('fade7').style.display='block'" value="公式">
+                <div id="light7" class="white_content" style="display:none" >計算公式為： <div class="function_style">工業部門_電力(Industry_Electicity) ÷ 最終能源消費_電力(Total final consumption_Electicity)</div><div class="Text-Right"><input type="button" href = "javascript:void(0)" onclick = "document.getElementById('light7').style.display='none';document.getElementById('fade7').style.display='none'" value="關閉公式"></div></div>
+            </div>	
+        </div>
+      </div>
+        </div><br><br>
+    <div id="step2">
+        <div class="sq"><u>Step2. 選取查詢國別</u></div>   
+        <input type="radio" name="panel-radio1" id="radio5" class="panel-control" checked>
+        <input type="radio" name="panel-radio1" id="radio6" class="panel-control">
+        <input type="radio" name="panel-radio1" id="radio7" class="panel-control">
+        <input type="radio" name="panel-radio1" id="radio8" class="panel-control">
+        <input type="radio" name="panel-radio1" id="radio9" class="panel-control">
+        <input type="radio" name="panel-radio1" id="radio10" class="panel-control">
+        <input type="radio" name="panel-radio1" id="radio11" class="panel-control">
+        <div class="tab-group">
+            <label for="radio5">常用</label>
+            <label for="radio6">亞太</label>
+            <label for="radio7">亞西</label>
+            <label for="radio8">歐洲</label>
+            <label for="radio9">北美</label>
+            <label for="radio10">中南美</label>
+            <label for="radio11">非洲</label></div>
+        <div class="content-group">
+        <!--常用國別-->
+            <div class="content content5">
+                <u>國家</u>
+                <div class="form-check1"><table>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EAP" type="checkbox" name="Country" value="EAP_010" id="EAP_010"><label class="form-check1-label" for="EAP_010">臺灣</label></td>
+                        <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EAP" type="checkbox" name="Country" value="EAP_020" id="EAP_020"><label class="form-check1-label" for="EAP_020">日本</label></td></tr>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EAP" type="checkbox" name="Country" value="EAP_039" id="EAP_039"><label class="form-check1-label" for="EAP_039">南韓</label></td>
+                        <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EAP" type="checkbox" name="Country" value="EAP_007" id="EAP_007"><label class="form-check1-label" for="EAP_007">中國大陸</label></td></tr>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EAP" type="checkbox" name="Country" value="EAP_002" id="EAP_002"><label class="form-check1-label" for="EAP_002">澳大利亞</label></td>
+                        <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input NA" type="checkbox" name="Country" value="NA_011" id="NA_011"><label class="form-check1-label" for="NA_011">美國</label></td></tr>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EUR" type="checkbox" name="Country" value="EUR_045" id="EUR_045"><label class="form-check1-label" for="EUR_045">英國</label></td>
+                        <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EUR" type="checkbox" name="Country" value="EUR_015" id="EUR_015"><label class="form-check1-label" for="EUR_015">德國</label></td></tr>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input EUR" type="checkbox" name="Country" value="EUR_014" id="EUR_014"><label class="form-check1-label" for="EUR_014">法國</label></td>
+                        <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input WA" type="checkbox" name="Country" value="WA_020" id="WA_020"><label class="form-check1-label" for="WA_020">俄羅斯</label></td></tr>
+                </table></div>
+                <u>地區</u>
+                <div class="form-check1"><table>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input" type="checkbox" name="Country" value="Other_001" id="Other_001"><label class="form-check1-label" for="Other_001">全球</label></td>
+                        <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input" type="checkbox" name="Country" value="Other_009" id="Other_009"><label class="form-check1-label" for="Other_009">歐盟</label></td></tr>
+                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="form-check1-input" type="checkbox" name="Country" value="Other_031" id="Other_031"><label class="form-check1-label" for="Other_031">OECD</label></td>
+                        <td></td></tr>
+                </table></div>
+            </div>
+        <!--亞太-->
+        <div class="content content6">
+            <div align="right" class="form-check1" style="background-color: rgb(240, 240, 240);"><input class="form-check1-input" type="checkbox" value="" id="EAP"><label class="form-check1-label" for="EAP">此頁全選</label></div>
+            <table>
+                        {%for eap in EAPS %}  
+                            {%if forloop.counter|divisibleby:"2" %}
+                                {%if eap.Country_id == "EAP_010"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_010" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td></tr>      
+                                {%elif eap.Country_id == "EAP_020"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_020" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td></tr>      
+                                {%elif eap.Country_id == "EAP_039"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_039" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td></tr>      
+                                {%elif eap.Country_id == "EAP_007"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_007" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td></tr>      
+                                {%elif eap.Country_id == "EAP_002"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_002" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td></tr>      
+                                {%else%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td></tr>      
+                                {%endif%}
+                            {%else%}
+                                {%if eap.Country_id == "EAP_010"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_010" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td>      
+                                {%elif eap.Country_id == "EAP_020"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_020" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td>      
+                                {%elif eap.Country_id == "EAP_039"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_039" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td>      
+                                {%elif eap.Country_id == "EAP_007"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_007" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td>      
+                                {%elif eap.Country_id == "EAP_002"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP EAP_002" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td>      
+                                {%else%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EAP" type="checkbox" name="Country" value={{eap.Country_id}} id={{eap.Country_id}}><label cless="form-check1-label" for={{eap.Country_id}}>{{eap.C_Name_Cht}}</label></td>      
+                                {%endif%}  
+                            {%endif%}                      
+                        {%endfor%}
+            </table></div>
+    <!--亞西-->
+        <div class="content content7">
+            <div align="right" class="form-check1" style="background-color: rgb(240, 240, 240);"><input class="form-check1-input" type="checkbox" value="" id="WA"><label class="form-check1-label" for="WA">此頁全選</label></div>
+            <table>
+                        {%for wa in WAS%}
+                            {%if forloop.counter|divisibleby:"2" %}
+                                {%if wa.Country_id == "WA_020"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input WA WA_020" type="checkbox" name="Country" value={{wa.Country_id}} id={{wa.Country_id}}><label cless="form-check1-label" for={{wa.Country_id}}>{{wa.C_Name_Cht}}</label></td></tr>      
+                                {%else%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input WA" type="checkbox" name="Country" value={{wa.Country_id}} id={{wa.Country_id}}><label cless="form-check1-label" for={{waq.Country_id}}>{{wa.C_Name_Cht}}</label></td></tr>      
+                                {%endif%}
+                            {%else%}
+                                {%if wa.Country_id == "WA_020"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input WA WA_020" type="checkbox" name="Country" value={{wa.Country_id}} id={{wa.Country_id}}><label cless="form-check1-label" for={{wa.Country_id}}>{{wa.C_Name_Cht}}</label></td>      
+                                {%else%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input WA" type="checkbox" name="Country" value={{wa.Country_id}} id={{wa.Country_id}}><label cless="form-check1-label" for={{wa.Country_id}}>{{wa.C_Name_Cht}}</label></td>      
+                                {%endif%}  
+                            {%endif%}                        
+                        {%endfor%}
+            </table></div>
+    <!--歐洲-->
+    <div class="content content8">
+        <div align="right" class="form-check1" style="background-color: rgb(240, 240, 240);"><input class="form-check1-input" type="checkbox" value="" id="EUR"><label class="form-check1-label" for="EUR">此頁全選</label></div>
+            <table>
+                        {%for eur in EURS%}
+                            {%if forloop.counter|divisibleby:"2" %}
+                                {%if eur.Country_id == "EUR_045"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR EUR_045" type="checkbox" name="Country" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td></tr>      
+                                {%elif eur.Country_id == "EUR_015"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR EUR_015" type="checkbox" name="Country" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td></tr>      
+                                {%elif eur.Country_id == "EUR_014"%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR EUR_014" type="checkbox" name="Country" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td></tr>      
+                                {%else%}
+                                    <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR" type="checkbox" name="Country" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td></tr>      
+                                {%endif%}
+                            {%else%}
+                                {%if eur.Country_id == "EUR_045"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR EUR_045" name="Country" type="checkbox" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td>      
+                                {%elif eur.Country_id == "EUR_015"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR EUR_015" name="Country" type="checkbox" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td>      
+                                {%elif eur.Country_id == "EUR_014"%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR EUR_014" name="Country" type="checkbox" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td>      
+                                {%else%}
+                                    <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input EUR" type="checkbox" name="Country" value={{eur.Country_id}} id={{eur.Country_id}}><label cless="form-check1-label" for={{eur.Country_id}}>{{eur.C_Name_Cht}}</label></td>      
+                                {%endif%}  
+                            {%endif%}                        
+                        {%endfor%}
+            </table></div>
+    <!--北美-->
+    <div class="content content9">
+        <div align="right" class="form-check1" style="background-color: rgb(240, 240, 240);"><input class="form-check1-input" type="checkbox" value="" id="NA"><label class="form-check1-label" for="NA">此頁全選</label></div>
+        <table>
+                    {%for nas in NAS%}
+                        {%if forloop.counter|divisibleby:"2" %}
+                            {%if nas.Country_id == "NA_011"%}
+                                <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input NA NA_011" type="checkbox" name="Country" value={{nas.Country_id}} id={{nas.Country_id}}><label cless="form-check1-label" for={{nas.Country_id}}>{{nas.C_Name_Cht}}</label></td></tr>      
+                            {%else%}
+                                <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input NA" type="checkbox" name="Country" value={{nas.Country_id}} id={{nas.Country_id}}><label cless="form-check1-label" for={{nas.Country_id}}>{{nas.C_Name_Cht}}</label></td></tr>      
+                            {%endif%}
+                        {%else%}
+                            {%if nas.Country_id == "NA_011"%}
+                                <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input NA NA_011" type="checkbox" name="Country" value={{nas.Country_id}} id={{nas.Country_id}}><label cless="form-check1-label" for={{nas.Country_id}}>{{nas.C_Name_Cht}}</label></td>      
+                            {%else%}
+                                <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input NA" type="checkbox" name="Country" value={{nas.Country_id}} id={{nas.Country_id}}><label cless="form-check1-label" for={{nas.Country_id}}>{{nas.C_Name_Cht}}</label></td>      
+                            {%endif%}  
+                        {%endif%}                        
+                {%endfor%}
+        </table></div>
+    <!--中南美-->
+    <div class="content content10">
+        <div align="right" class="form-check1" style="background-color: rgb(240, 240, 240);"><input class="form-check1-input" type="checkbox" value="" id="LAC"><label class="form-check1-label" for="LAC">此頁全選</label></div>
+        <table>
+                    {%for lac in LACS%}
+                        {%if forloop.counter|divisibleby:"2" %}
+                                <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input LAC" type="checkbox" name="Country" value={{lac.Country_id}} id={{lac.Country_id}}><label cless="form-check1-label" for={{lac.Country_id}}>{{lac.C_Name_Cht}}</label></td></tr>      
+                        {%else%}
+                                <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input LAC" type="checkbox" name="Country" alue={{lac.Country_id}} id={{lac.Country_id}}><label cless="form-check1-label" for={{lac.Country_id}}>{{lac.C_Name_Cht}}</label></td>      
+                        {%endif%}                        
+                {%endfor%}
+        </table></div>       
+    <!--非洲-->
+    <div class="content content11">
+        <div align="right" class="form-check1" style="background-color: rgb(240, 240, 240);"><input class="form-check1-input" type="checkbox" value="" id="AFR"><label class="form-check1-label" for="AFR">此頁全選</label></div>
+        <table>
+                    {%for afr in AFRS%}
+                        {%if forloop.counter|divisibleby:"2" %}
+                                <td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input AFR" type="checkbox" name="Country" value={{afr.Country_id}} id={{afr.Country_id}}><label cless="form-check1-label" for={{afr.Country_id}}>{{afr.C_Name_Cht}}</label></td></tr>      
+                        {%else%}
+                                <tr><td class="Align-Top Width-300" style="column-width: 10cm;"><input class="from-check1-input AFR" type="checkbox" name="Country" value={{afr.Country_id}} id={{afr.Country_id}}><label cless="form-check1-label" for={{afr.Country_id}}>{{afr.C_Name_Cht}}</label></td>      
+                        {%endif%}                        
+                {%endfor%}
+        </table></div></div><br><br>
+    <div id="step3">
+        <div class="sq"><u>Step3. 選取查詢年度</u></div>
+        <p style="font-size:smaller">(註：IEA資料庫中部份國家資料落後2年。)</p>
+        <div class="drop">
+            <!--<div class="dropOption">
+                <span>查詢年度</span>
+            </div>-->
+            <div><span></span><span><select class="dropdown" name="year" multiple size=10 required></span>
+                {%for i in year%}
+                <option value={{i}}>{{i}}</option>
+                {%endfor%}
+            </select></div>
+            <div></div>
+        </div>
+    </div>
+    <div align="right"><button type="submit" id="chekcbutton1">送出查詢</button></div>       
+</form>
+
+<script>
+    document.getElementById('IND_01').onclick = function() {
+		var checkboxes = document.querySelectorAll('.IND_01');
+		for (var checkbox of checkboxes) {
+			checkbox.checked = this.checked;
+		}
+	}
+	document.getElementById('GHG_02').onclick = function() {
+		var checkboxes = document.querySelectorAll('.GHG_02');
+		for (var checkbox of checkboxes) {
+			checkbox.checked = this.checked;
+		}
+	}
+
+
+    document.getElementById('EAP').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EAP');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+    document.getElementById('WA').onclick = function() {
+        var checkboxes = document.querySelectorAll('.WA');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+    document.getElementById('EUR').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EUR');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }	
+    document.getElementById('NA').onclick = function() {
+        var checkboxes = document.querySelectorAll('.NA');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+    document.getElementById('LAC').onclick = function() {
+        var checkboxes = document.querySelectorAll('.LAC');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+    document.getElementById('AFR').onclick = function() {
+        var checkboxes = document.querySelectorAll('.AFR');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EAP_010').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EAP_010');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EAP_020').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EAP_020');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EAP_039').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EAP_039');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EAP_007').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EAP_007');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EAP_002').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EAP_002');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('NA_011').onclick = function() {
+        var checkboxes = document.querySelectorAll('.NA_011');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EUR_045').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EUR_045');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EUR_015').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EUR_015');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('EUR_014').onclick = function() {
+        var checkboxes = document.querySelectorAll('.EUR_014');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    document.getElementById('WA_020').onclick = function() {
+        var checkboxes = document.querySelectorAll('.WA_020');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }	
+    }
+
+    const oldValue =window.sessionStorage.getItem('form-check-input') 
+
+    document.querySelector('.form-check-input').value = oldValue
+
+    document.querySelector('.btn').addEventListener('click', function() {
+        const value = document.querySelector('.form-check-input').value
+        window.sessionStorage.setItem('form-check-input', value)
+    })
+    
+</script>
+
+</body>
